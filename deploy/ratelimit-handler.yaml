@@ -1,0 +1,15 @@
+apiVersion: config.istio.io/v1alpha2
+kind: memquota
+metadata:
+  name: handler
+  namespace: istio-system
+spec:
+  quotas:
+  - name: requestcount.quota.istio-system
+    maxAmount: 5
+    validDuration: 10s
+    overrides:
+    - dimensions:
+        destination: sample
+      maxAmount: 1
+      validDuration: 1s
