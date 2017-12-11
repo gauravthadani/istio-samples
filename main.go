@@ -24,6 +24,7 @@ func main() {
 	proxy.Director = report
 	http.Handle("/", proxy)
 	http.Handle("/hello", handler.HelloWorld())
+	http.Handle("/alternate", handler.Alternate())
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
