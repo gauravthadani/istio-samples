@@ -1,4 +1,4 @@
-GOOS=linux go build ./ && docker build -t sample ./ && docker tag sample 192.168.99.100:5000/golang/sample && docker push 192.168.99.100:5000/golang/sample
+go build ./ && docker build -t sample ./ && docker tag sample gauravthadani/istiosample && docker push gauravthadani/istiosample
 
 
 Commands
@@ -16,3 +16,5 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=pr
 Grafana
 
  kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
+
+ 

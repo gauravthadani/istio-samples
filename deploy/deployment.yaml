@@ -17,7 +17,7 @@ spec:
         app: sample
     spec:
       containers:
-      - image: 192.168.99.100:5000/golang/sample
+      - image: gauravthadani/istiosample
         name: sample
         ports:
         - containerPort: 8080
