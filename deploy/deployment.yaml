@@ -1,17 +1,15 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    sidecar.istio.io/status: injected-version-root@881c9704f303-0.2.9-48ce32e6909d120a8ecee58b6b7a84094da36b7c
   creationTimestamp: null
   name: sample
 spec:
-  replicas: 1
+  replicas: 2
   strategy: {}
   template:
     metadata:
       annotations:
-        sidecar.istio.io/status: injected-version-root@881c9704f303-0.2.9-48ce32e6909d120a8ecee58b6b7a84094da36b7c
+        sidecar.istio.io/status: '{"version":"1e8f480eee0d2c455cb96c4acc9a723ca2b4bff32a7837e65787a5ef6853c820","initContainers":["istio-init","enable-core-dump"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"]}'
       creationTimestamp: null
       labels:
         app: sample
@@ -19,14 +17,13 @@ spec:
       containers:
       - image: gauravthadani/istiosample
         name: sample
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         resources: {}
       - args:
         - proxy
         - sidecar
-        - -v
-        - "2"
         - --configPath
         - /etc/istio/proxy
         - --binaryPath
@@ -38,7 +35,7 @@ spec:
         - --parentShutdownDuration
         - 1m0s
         - --discoveryAddress
-        - istio-pilot.istio-system:8080
+        - istio-pilot.istio-system:15003
         - --discoveryRefreshDelay
         - 1s
         - --zipkinAddress
@@ -49,6 +46,8 @@ spec:
         - istio-mixer.istio-system:9125
         - --proxyAdminPort
         - "15000"
+        - --controlPlaneAuthPolicy
+        - NONE
         env:
         - name: POD_NAME
           valueFrom:
@@ -62,13 +61,13 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        image: docker.io/istio/proxy_debug:0.2.9
+        image: docker.io/istio/proxy:0.6.0
         imagePullPolicy: IfNotPresent
         name: istio-proxy
         resources: {}
         securityContext:
-          privileged: true
-          readOnlyRootFilesystem: false
+          privileged: false
+          readOnlyRootFilesystem: true
           runAsUser: 1337
         volumeMounts:
         - mountPath: /etc/istio/proxy
@@ -82,7 +81,7 @@ spec:
         - "15001"
         - -u
         - "1337"
-        image: docker.io/istio/proxy_init:0.2.9
+        image: docker.io/istio/proxy_init:0.6.0
         imagePullPolicy: IfNotPresent
         name: istio-init
         resources: {}
@@ -90,7 +89,6 @@ spec:
           capabilities:
             add:
             - NET_ADMIN
-          privileged: true
       - args:
         - -c
         - sysctl -w kernel.core_pattern=/etc/istio/proxy/core.%e.%p.%t && ulimit -c
@@ -106,7 +104,6 @@ spec:
       volumes:
       - emptyDir:
           medium: Memory
-          sizeLimit: "0"
         name: istio-envoy
       - name: istio-certs
         secret:
