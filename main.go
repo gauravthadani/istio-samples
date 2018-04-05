@@ -25,6 +25,7 @@ func main() {
 	http.Handle("/", proxy)
 	http.Handle("/hello", handler.HelloWorld())
 	http.Handle("/alternate", handler.Alternate())
+	http.Handle("/unique", handler.StaticGuid())
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
