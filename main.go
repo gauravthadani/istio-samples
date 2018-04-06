@@ -26,6 +26,7 @@ func main() {
 	http.Handle("/hello", handler.HelloWorld())
 	http.Handle("/alternate", handler.Alternate())
 	http.Handle("/unique", handler.StaticGuid())
+	http.Handle("/sleep", handler.Sleep())
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

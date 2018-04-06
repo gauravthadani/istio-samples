@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   creationTimestamp: null
-  name: sample-world
+  name: sample-universe
 spec:
   replicas: 1
   strategy: {}
@@ -13,11 +13,11 @@ spec:
       creationTimestamp: null
       labels:
         app: sample
-        version: v1
+        version: v2
     spec:
       containers:
-      - image: gauravthadani/istiosample
-        name: sample-world
+      - image: gauravthadani/istiosample:universe
+        name: sample-universe
         ports:
         - containerPort: 8080
         resources: {}

@@ -1,17 +1,17 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: sample-world
+  name: sample-universe
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: sample
-        version: v1
+        version: v2
     spec:
       containers:
-        - name: sample-world
-          image: gauravthadani/istiosample
+        - name: sample-universe
+          image: gauravthadani/istiosample:universe
           ports:
             - containerPort: 8080
