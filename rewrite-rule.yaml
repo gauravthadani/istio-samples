@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: rewrite-route
+spec:
+  hosts:
+  - sample-svc
+  http:
+  - match:
+    - uri:
+        prefix: /hello
+    rewrite:
+      uri: /hello
+    route:
+    - destination:
+        name: sample-svc
+        subset: v2
